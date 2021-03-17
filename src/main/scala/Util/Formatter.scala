@@ -12,11 +12,7 @@ object Formatter {
 
 
   def decode(encodedText: String): String = {
-    try {
-      Base64.getDecoder.decode(encodedText).map(_.toChar).mkString
-    } catch {
-      case _ => "Wrong Answer"
-    }
+    Base64.getDecoder.decode(encodedText).map(_.toChar).mkString
   }
 
   def toFile(text: String, fileName: String, path:String): String = {
