@@ -8,7 +8,6 @@ import org.apache.flink.api.scala._
 
 object ParserBatch {
 
-
   def main(args: Array[String]) {
     // set up execution environment
     val env = ExecutionEnvironment.getExecutionEnvironment
