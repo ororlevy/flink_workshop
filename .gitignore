@@ -9,7 +9,8 @@ lib/
 target/
 project/project/
 project/build.properties
-
+**/project/target/**
+target/**
 #IDEA
 .idea/
 
