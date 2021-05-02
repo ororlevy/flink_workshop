@@ -1,0 +1,27 @@
+.sbtopts
+.vscode
+
+### Scala ###
+/**/*.log
+
+# sbt specific
+lib/
+target/
+project/project/
+project/build.properties
+
+#IDEA
+.idea/
+
+akka-diagnostics
+
+.metals/
+.bloop/
+
+#vi tmp files
+*.swp
+
+#apple finder files
+**/.DS_Store
+
+.bsp

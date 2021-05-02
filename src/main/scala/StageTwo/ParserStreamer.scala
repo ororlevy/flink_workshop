@@ -1,12 +1,11 @@
-package StageOne
-
+package StageTwo
 
 import Util.Formatter
 import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.api.scala._
 
 
-object ParserBatch {
+object ParserStreamer {
 
 
   def main(args: Array[String]) {
