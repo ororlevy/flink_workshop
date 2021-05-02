@@ -14,7 +14,7 @@ object ParserBatch {
     val env = ExecutionEnvironment.getExecutionEnvironment
     val resourcesDirectory = new java.io.File(".").getCanonicalPath + "/src/main/resources/"
     val text = env.readTextFile(resourcesDirectory + "welcome")
-    val fileName = text.map(txt => Formatter.decode(txt)).map(decodedTxt => Formatter.toFile(decodedTxt, "sol1.txt", resourcesDirectory))
+    val fileName = text.map(txt => Formatter.decode(txt)).map(decodedTxt => Formatter.writeToFile(decodedTxt, "sol1.txt", resourcesDirectory))
     fileName.print()
   }
 

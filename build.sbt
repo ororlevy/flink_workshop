@@ -13,5 +13,5 @@ libraryDependencies ++= Seq(
   "org.apache.flink" %% "flink-runtime-web" % flinkVersion,
   "org.apache.flink" %% "flink-statebackend-rocksdb" % flinkVersion,
   "org.apache.flink" %% "flink-queryable-state-runtime" % flinkVersion,
-  "org.apache.flink" % "flink-metrics-dropwizard" % flinkVersion,
+  "org.apache.flink" % "flink-metrics-dropwizard" % flinkVersion
 )
