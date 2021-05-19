@@ -11,7 +11,8 @@ object KafkaSource {
     val properties = new Properties()
     properties.setProperty("bootstrap.servers", "localhost:9092")
     properties.setProperty("group.id", "test")
-    new FlinkKafkaConsumer[String]("topic", new SimpleStringSchema(), properties)
+    properties.setProperty("enable.auto.commit", "true")
+    new FlinkKafkaConsumer[String]("test", new SimpleStringSchema(), properties)
   }
 
 }
