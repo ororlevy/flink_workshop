@@ -17,7 +17,7 @@ object ParserBatch {
     val inputFile = "welcome"
     val fullPath = if(args.isEmpty) resourcesDirectory + inputFile else params.get("input")
     val text = env.readTextFile(fullPath)
-    val textBatch = text.map(txt => Formatter.decode(txt)) //.map(decodedTxt => Formatter.writeToFile(decodedTxt, "sol1.txt", resourcesDirectory))
+    val textBatch = text.map(txt => Formatter.decode(txt))
     textBatch.writeAsText(params.get("output"), WriteMode.OVERWRITE)
     env.execute()
   }

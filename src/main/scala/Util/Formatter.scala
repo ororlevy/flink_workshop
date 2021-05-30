@@ -14,7 +14,8 @@ object Formatter {
 
 
   def decode(encodedText: String): String = {
-    Base64.getDecoder.decode(encodedText).map(_.toChar).mkString
+    val decoded = Base64.getDecoder.decode(encodedText).map(_.toChar).mkString
+    decoded.replace("+", " ")
   }
 
   def writeToFile(text: String, fileName: String, path: String): String = {
