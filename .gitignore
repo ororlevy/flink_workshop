@@ -26,3 +26,6 @@ akka-diagnostics
 **/.DS_Store
 
 .bsp
+
+flink-1.12.3/log/*
+kafka_2.12-2.3.1/logs/*

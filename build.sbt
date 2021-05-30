@@ -5,7 +5,7 @@ version := "0.1"
 scalaVersion := "2.11.8"
 
 val flinkVersion =  "1.12.3"
-mainClass in (Compile, packageBin) := Some("StageOne.ParserBatch")
+mainClass in (Compile, packageBin) := Some("StageTwo.ParserStreamer")
 libraryDependencies ++= Seq(
   "org.apache.flink" %% "flink-scala" % flinkVersion,
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion,
