@@ -12,7 +12,7 @@ object ParserStreamer {
     // set up execution environment
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     env.setParallelism(1)
-    val resourcesDirectory = new java.io.File(".").getCanonicalPath + "/src/main/resources/"
+    val resourcesDirectory = "../answers/"
     val kafka = env.addSource(KafkaSource.getKafkaConsumer());
 
     val dataStream = kafka.map(
