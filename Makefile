@@ -21,3 +21,6 @@ delete-history:
 
 solve:
 	./kafka_2.12-2.3.1/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+
+flink-ready:
+	unzip flink-1.12.3/lib/dist.zip -d flink-1.12.3/lib

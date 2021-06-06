@@ -2,7 +2,9 @@
 
 #### Your backpack is ready for you  
 We have packed for you all the tools for the upcoming adventure 
-1. Flink v1.12.3 for scala 1.11 
+1. Flink v1.12.3 for scala 2.11
+    - just unzip dist.zip in flink-1.12.3/lib
+    - on linux/mac just run 'make flink-ready'
 2. Kafka to work locally.
 
 #### Controlling kafka
