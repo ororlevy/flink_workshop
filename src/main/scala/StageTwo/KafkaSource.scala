@@ -12,7 +12,10 @@ object KafkaSource {
     properties.setProperty("bootstrap.servers", "localhost:9092")
     properties.setProperty("group.id", "test")
     properties.setProperty("enable.auto.commit", "true")
-    new FlinkKafkaConsumer[String]("test", new SimpleStringSchema(), properties)
+    // The time interval for offset submission, in milliseconds
+    properties.setProperty("auto.offset.reset", "latest")
+    new FlinkKafkaConsumer[String]("maze", new SimpleStringSchema(), properties)
+
   }
 
 }
