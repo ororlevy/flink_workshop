@@ -1,4 +1,5 @@
 import StageThree.MagicLock
+import Util.Formatter
 import org.scalatest.flatspec.AnyFlatSpec
 
 class LockTest extends AnyFlatSpec {
@@ -37,10 +38,10 @@ class LockTest extends AnyFlatSpec {
     assert(result == MagicLock.initState)
   }
 
-  "L1, L1 ,L1 from initState" should "be equal to 550" in {
+  "L1, L1 ,L1 from initState" should "be equal to 559" in {
     val move = "l1"
     val sum = MagicLock.solve(Seq(move, move, move))
-    assert(sum.toInt == 550)
+    assert(sum.toInt == 559)
   }
 
 }

@@ -4,7 +4,7 @@ object MagicLock {
 
   val initState: Seq[Int] = (1 to 9) :+ 0
 
-  val getSum: Seq[Int] => Int = s => s.zipWithIndex.map { case (n, i) => n * i }.sum
+  val getSum: Seq[Int] => Int = s => s.zipWithIndex.map { case (n, i) => n * i }.sum + s.head
 
   def validate(move: String): (Char, Int) =
     move.toCharArray match {

@@ -23,7 +23,10 @@ object WindowStreamer {
     }
     logger.info(s"Running on $mode")
     env.setParallelism(1)
-    val path = new java.io.File(".").getCanonicalPath + "/src/main/resources/"
+    val resourcesDirectory = new java.io.File(".").getCanonicalPath + "/src/main/resources/"
+    val answersFolder = "s3-answers/"
+    val solFolder = "/s3-sol/"
+    val path = resourcesDirectory + answersFolder
     logger.info(s"path: $path")
     val consumer = KafkaSource.getKafkaConsumer()
     val kafka = env.addSource(consumer)
@@ -40,12 +43,12 @@ object WindowStreamer {
         })
     val config = OutputFileConfig
       .builder()
-      .withPartPrefix("sol3")
+      .withPartPrefix("attempt")
       .withPartSuffix(".txt")
       .build()
 
     val sink = StreamingFileSink
-      .forRowFormat(new Path(path + "/1"), new SimpleStringEncoder[String]("UTF-8"))
+      .forRowFormat(new Path(resourcesDirectory + solFolder), new SimpleStringEncoder[String]("UTF-8"))
       .withBucketCheckInterval(5000)
       .withRollingPolicy(new OnNewElementCheckpointPolicy[String, String])
       .withOutputFileConfig(config)

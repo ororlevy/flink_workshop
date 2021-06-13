@@ -1,6 +1,5 @@
 package StageTwo
 
-import StageThree.WindowStreamer.logger
 import Util.model.logger
 import Util.{Formatter, model}
 import org.apache.flink.api.common.serialization.SimpleStringEncoder
@@ -21,7 +20,10 @@ object ParserStreamer{
     }
     logger.info(s"Running on $mode")
     env.setParallelism(1)
-    val resourcesDirectory = new java.io.File(".").getCanonicalPath + "/src/main/resources/answers"
+    val resourcesDirectory = new java.io.File(".").getCanonicalPath + "/src/main/resources/"
+    val answersFolder = "s2-answers/"
+    val solFolder = "/s2-sol/"
+    val path = resourcesDirectory + answersFolder
     val consumer = KafkaSource.getKafkaConsumer()
     val kafka = env.addSource(consumer)
 
@@ -29,7 +31,7 @@ object ParserStreamer{
     val dataStream =
       kafka.map(
         fileName =>
-          Formatter.readFile(fileName, resourcesDirectory)(logger)
+          Formatter.readFile(fileName, path)(logger)
       ).map(
         text => {
           logger.info(s"Got text: ${text.substring(0, 10)}")
@@ -37,12 +39,12 @@ object ParserStreamer{
         })
     val config = OutputFileConfig
       .builder()
-      .withPartPrefix("sol2")
-      .withPartSuffix(".ext")
+      .withPartPrefix("attempt")
+      .withPartSuffix(".txt")
       .build()
 
     val sink = StreamingFileSink
-      .forRowFormat(new Path(resourcesDirectory + "/1"), new SimpleStringEncoder[String]("UTF-8"))
+      .forRowFormat(new Path(resourcesDirectory + solFolder), new SimpleStringEncoder[String]("UTF-8"))
       .withBucketCheckInterval(5000)
       .withRollingPolicy(new OnNewElementCheckpointPolicy[String, String])
       .withOutputFileConfig(config)
