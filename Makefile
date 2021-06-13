@@ -20,7 +20,7 @@ delete-history:
 	rm -rf /tmp/zookeeper-workshop
 
 solve:
-	./kafka_2.12-2.3.1/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+	./kafka_2.12-2.3.1/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic maze
 
 flink-ready:
 	unzip flink-1.12.3/lib/dist.zip -d flink-1.12.3/lib

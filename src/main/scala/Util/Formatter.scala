@@ -1,9 +1,10 @@
 package Util
 
+import org.slf4j.Logger
+
 import java.io.{BufferedWriter, File, FileWriter}
 import java.nio.charset.StandardCharsets
 import java.util.Base64
-
 import scala.io.Source
 
 object Formatter {
@@ -27,8 +28,12 @@ object Formatter {
 
   }
 
-  def readFile(fileName: String, path: String): String = {
-    val source = Source.fromFile(path + fileName)
+  def readFile(fileName: String, path: String)(logger: Logger): String = {
+    val pathToFile = path + fileName
+    val exists = scala.reflect.io.File(path + fileName).exists && scala.reflect.io.File(path + fileName).isFile
+    val finalFile = if (exists) pathToFile else path + "error"
+    logger.info(s"going to read file: $finalFile")
+    val source = Source.fromFile(finalFile)
     val file = source.getLines.mkString
     source.close()
     file

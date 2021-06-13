@@ -21,3 +21,4 @@ you could use the old-fashioned commands if you feel like it.
 ### Your Flink Application
 Your Flink is armed with a top-notch cipher that can decode any messages in the journey.
 But your application is effortless; you will have to upgrade it later on 
+You can compile and build JAR by simpling using sbt assembly 
