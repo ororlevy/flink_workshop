@@ -5,7 +5,7 @@
 /**/*.log
 
 # sbt specific
-lib/
+lib/*
 target/
 project/project/
 project/build.properties
@@ -26,3 +26,17 @@ akka-diagnostics
 **/.DS_Store
 
 .bsp
+
+flink-1.12.3/log/*
+kafka_2.12-2.3.1/logs/*
+!flink-1.12.3/lib/dist.zip
+!flink-1.12.3/lib/flink-csv-1.12.3.jar
+!flink-1.12.3/lib/flink-json-1.12.3.jar
+!flink-1.12.3/lib/flink-shaded-zookeeper-3.4.14.jar
+!flink-1.12.3/lib/flink-table-blink_2.11-1.12.3.jar
+!flink-1.12.3/lib/flink-table_2.11-1.12.3.jar
+!flink-1.12.3/lib/log4j-1.2-api-2.12.1.jar
+!flink-1.12.3/lib/log4j-api-2.12.1.jar
+!flink-1.12.3/lib/log4j-core-2.12.1.jar
+!flink-1.12.3/lib/log4j-slf4j-impl-2.12.1.jar
+flink-1.12.3/lib/flink-dist_2.11-1.12.3.jar
