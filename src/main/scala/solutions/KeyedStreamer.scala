@@ -1,20 +1,25 @@
-package StageThree
+package solutions
 
+import StageFour.{KeyMaker, MazeTrigger, Pos, TreasureHunt, WindowFunc}
 import StageTwo.{KafkaSource, OnNewElementCheckpointPolicy}
 import Util.model.logger
 import Util.{Formatter, model}
 import org.apache.flink.api.common.serialization.SimpleStringEncoder
+import org.apache.flink.api.common.state.ValueStateDescriptor
 import org.apache.flink.api.scala.createTypeInformation
 import org.apache.flink.core.fs.Path
 import org.apache.flink.streaming.api.environment.LocalStreamEnvironment
 import org.apache.flink.streaming.api.functions.sink.filesystem.{OutputFileConfig, StreamingFileSink}
-import org.apache.flink.streaming.api.scala.{AllWindowedStream, DataStream, StreamExecutionEnvironment}
-import org.apache.flink.streaming.api.windowing.windows.GlobalWindow
+import org.apache.flink.streaming.api.scala.{KeyedStream, StreamExecutionEnvironment, WindowedStream}
+import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows
+import org.apache.flink.streaming.api.windowing.windows.Window
 
-object WindowStreamer {
+object KeyedStreamer {
 
+  def createKey(element: (Char, Char)): Char = element._1
 
-  def createWindow(consumer: DataStream[String]): AllWindowedStream[String, GlobalWindow] = ???
+  def createWindow(dataStreamKafkaConsumer: KeyedStream[(Char, Char), Char]): WindowedStream[(Char, Char), Char, Window] =
+    dataStreamKafkaConsumer.window(GlobalWindows.create())
 
 
   def main(args: Array[String]) {
@@ -28,19 +33,28 @@ object WindowStreamer {
     logger.info(s"Running on $mode")
     env.setParallelism(1)
     val resourcesDirectory = new java.io.File(".").getCanonicalPath + "/src/main/resources/"
-    val answersFolder = "s3-answers/"
-    val solFolder = "/s3-sol/"
+    val answersFolder = "s4-answers/"
+    val solFolder = "/s4-sol/"
     val path = resourcesDirectory + answersFolder
     logger.info(s"path: $path")
     val consumer = KafkaSource.getKafkaConsumer()
     val kafka = env.addSource(consumer)
+    kafka.dataType.createSerializer(env.getConfig)
+    val hunt = TreasureHunt.mazes
+    val states = new ValueStateDescriptor[Pos]("last-pos", classOf[Pos])
 
 
+    val keyed = kafka
+      .map(m => KeyMaker.commandMapper(m))
+      .keyBy(ele => createKey(ele))
     val dataStream =
-      createWindow().process(new LockWindowFunction(logger)).map {
-        fileName =>
-          Formatter.readFile(fileName, path)(logger)
-      }.map(
+      createWindow(keyed)
+        .trigger(new MazeTrigger(hunt, states, logger))
+        .process(new WindowFunc(states))
+        .map {
+          fileName =>
+            Formatter.readFile(fileName, path)(logger)
+        }.map(
         text => {
           logger.info(s"Got text: ${text.substring(0, 10)}")
           Formatter.decode(text)
@@ -60,7 +74,7 @@ object WindowStreamer {
       .build()
 
     dataStream.addSink(sink)
-    env.enableCheckpointing(5000)
+    env.enableCheckpointing(10000)
     env.execute()
 
   }

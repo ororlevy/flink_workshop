@@ -9,10 +9,14 @@ import org.apache.flink.api.scala.createTypeInformation
 import org.apache.flink.core.fs.Path
 import org.apache.flink.streaming.api.environment.LocalStreamEnvironment
 import org.apache.flink.streaming.api.functions.sink.filesystem.{OutputFileConfig, StreamingFileSink}
-import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
-import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows
+import org.apache.flink.streaming.api.scala.{KeyedStream, StreamExecutionEnvironment, WindowedStream}
+import org.apache.flink.streaming.api.windowing.windows.Window
 
 object KeyedStreamer {
+
+  def createKey(element: (Char, Char)): Char = ???
+
+  def createWindow(dataStreamKafkaConsumer: KeyedStream[(Char, Char), Char]): WindowedStream[(Char, Char), Char, Window] = ???
 
 
   def main(args: Array[String]) {
@@ -37,11 +41,11 @@ object KeyedStreamer {
     val states = new ValueStateDescriptor[Pos]("last-pos", classOf[Pos])
 
 
+    val keyed = kafka
+      .map(m => KeyMaker.commandMapper(m))
+      .keyBy(ele => createKey(ele))
     val dataStream =
-      kafka
-        .map(KeyMaker.commandMapper(_))
-        .keyBy(_._1)
-        .window(GlobalWindows.create())
+      createWindow(keyed)
         .trigger(new MazeTrigger(hunt, states, logger))
         .process(new WindowFunc(states))
         .map {

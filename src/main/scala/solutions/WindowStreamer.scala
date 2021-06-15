@@ -1,5 +1,6 @@
-package StageThree
+package solutions
 
+import StageThree.LockWindowFunction
 import StageTwo.{KafkaSource, OnNewElementCheckpointPolicy}
 import Util.model.logger
 import Util.{Formatter, model}
@@ -9,17 +10,21 @@ import org.apache.flink.core.fs.Path
 import org.apache.flink.streaming.api.environment.LocalStreamEnvironment
 import org.apache.flink.streaming.api.functions.sink.filesystem.{OutputFileConfig, StreamingFileSink}
 import org.apache.flink.streaming.api.scala.{AllWindowedStream, DataStream, StreamExecutionEnvironment}
+import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows
+import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.api.windowing.windows.GlobalWindow
 
 object WindowStreamer {
 
 
-  def createWindow(consumer: DataStream[String]): AllWindowedStream[String, GlobalWindow] = ???
+  def createWindow(dataStreamKafkaConsumer: DataStream[String]): AllWindowedStream[String, GlobalWindow] =
+    dataStreamKafkaConsumer.countWindowAll(3)
 
+  def createWindow2(dataStreamKafkaConsumer: DataStream[String]): AllWindowedStream[String, GlobalWindow] =
+    dataStreamKafkaConsumer.windowAll(TumblingEventTimeWindows.of(Time.seconds(10)))
 
   def main(args: Array[String]) {
     // set up execution environment
-
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     val mode = env.getJavaEnv match {
       case _: LocalStreamEnvironment => model.StreamingMode.Local
@@ -37,7 +42,7 @@ object WindowStreamer {
 
 
     val dataStream =
-      createWindow().process(new LockWindowFunction(logger)).map {
+      createWindow(kafka).process(new LockWindowFunction(logger)).map {
         fileName =>
           Formatter.readFile(fileName, path)(logger)
       }.map(
