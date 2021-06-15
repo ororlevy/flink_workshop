@@ -22,12 +22,5 @@ object KeyMaker {
     }
   }
 
-  def createKey(message: String): Char = {
-      if(validate(message)) {
-        message.toCharArray.head.toUpper
-      } else {
-        'x'
-      }
-  }
 
 }
