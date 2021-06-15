@@ -1,6 +1,6 @@
 package solutions
 
-import StageFour.{KeyMaker, MazeTrigger, Pos, TreasureHunt, WindowFunc}
+import StageFour._
 import StageTwo.{KafkaSource, OnNewElementCheckpointPolicy}
 import Util.model.logger
 import Util.{Formatter, model}
@@ -12,13 +12,13 @@ import org.apache.flink.streaming.api.environment.LocalStreamEnvironment
 import org.apache.flink.streaming.api.functions.sink.filesystem.{OutputFileConfig, StreamingFileSink}
 import org.apache.flink.streaming.api.scala.{KeyedStream, StreamExecutionEnvironment, WindowedStream}
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows
-import org.apache.flink.streaming.api.windowing.windows.Window
+import org.apache.flink.streaming.api.windowing.windows.GlobalWindow
 
 object KeyedStreamer {
 
   def createKey(element: (Char, Char)): Char = element._1
 
-  def createWindow(dataStreamKafkaConsumer: KeyedStream[(Char, Char), Char]): WindowedStream[(Char, Char), Char, Window] =
+  def createWindow(dataStreamKafkaConsumer: KeyedStream[(Char, Char), Char]): WindowedStream[(Char, Char), Char, GlobalWindow] =
     dataStreamKafkaConsumer.window(GlobalWindows.create())
 
 

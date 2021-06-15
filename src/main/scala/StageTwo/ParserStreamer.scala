@@ -2,8 +2,9 @@ package StageTwo
 
 import Util.model.logger
 import Util.{Formatter, model}
+import org.apache.flink.api.scala.createTypeInformation
 import org.apache.flink.streaming.api.environment.LocalStreamEnvironment
-import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.CheckpointRollingPolicy
+import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.{CheckpointRollingPolicy, OnCheckpointRollingPolicy}
 import org.apache.flink.streaming.api.functions.sink.filesystem.{OutputFileConfig, StreamingFileSink}
 import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
@@ -33,8 +34,8 @@ object ParserStreamer{
     val solFolder = "/s2-sol/"
     val path = resourcesDirectory + answersFolder
 
-    val consumer = getConsumer()
-    val kafka = defineDataStreamSource()
+    val consumer = getConsumer
+    val kafka = defineDataStreamSource(env, consumer)
 
     val dataStream =
       kafka.map(
@@ -55,10 +56,11 @@ object ParserStreamer{
 
     val outputPath  = resourcesDirectory + solFolder
 
-    val sink:StreamingFileSink[String] = createStreamFile()
+    // replace checkpoint rolling policy
+    val sink:StreamingFileSink[String] = createStreamFile(outputPath, new OnNewElementCheckpointPolicy[String, String], config)
 
     dataStream.addSink(sink)
-    enableCheckpointing()
+    enableCheckpointing(env)
     env.execute()
 
   }

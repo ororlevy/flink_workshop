@@ -12,7 +12,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.{OutputFileConfi
 import org.apache.flink.streaming.api.scala.{AllWindowedStream, DataStream, StreamExecutionEnvironment}
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows
 import org.apache.flink.streaming.api.windowing.time.Time
-import org.apache.flink.streaming.api.windowing.windows.GlobalWindow
+import org.apache.flink.streaming.api.windowing.windows.{GlobalWindow, TimeWindow}
 
 object WindowStreamer {
 
@@ -20,7 +20,7 @@ object WindowStreamer {
   def createWindow(dataStreamKafkaConsumer: DataStream[String]): AllWindowedStream[String, GlobalWindow] =
     dataStreamKafkaConsumer.countWindowAll(3)
 
-  def createWindow2(dataStreamKafkaConsumer: DataStream[String]): AllWindowedStream[String, GlobalWindow] =
+  def createWindow2(dataStreamKafkaConsumer: DataStream[String]): AllWindowedStream[String, TimeWindow] =
     dataStreamKafkaConsumer.windowAll(TumblingEventTimeWindows.of(Time.seconds(10)))
 
   def main(args: Array[String]) {

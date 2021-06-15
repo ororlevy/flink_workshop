@@ -2,11 +2,11 @@ package StageFour
 
 import org.apache.flink.api.common.state.ValueStateDescriptor
 import org.apache.flink.streaming.api.windowing.triggers.{Trigger, TriggerResult}
-import org.apache.flink.streaming.api.windowing.windows.Window
+import org.apache.flink.streaming.api.windowing.windows.GlobalWindow
 import org.slf4j.Logger
 
-class MazeTrigger(mazes: Map[Char, Room], states: ValueStateDescriptor[Pos], logger: Logger) extends Trigger[(Char, Char), Window] {
-  override def onElement(element: (Char, Char), timestamp: Long, window: Window, ctx: Trigger.TriggerContext): TriggerResult = {
+class MazeTrigger(mazes: Map[Char, Room], states: ValueStateDescriptor[Pos], logger: Logger) extends Trigger[(Char, Char), GlobalWindow] {
+  override def onElement(element: (Char, Char), timestamp: Long, window: GlobalWindow, ctx: Trigger.TriggerContext): TriggerResult = {
     val state = ctx.getPartitionedState(states)
     val pos = state.value()
     val validPos = if (pos == null) TreasureHunt.startingPos else pos
@@ -25,10 +25,10 @@ class MazeTrigger(mazes: Map[Char, Room], states: ValueStateDescriptor[Pos], log
     }
   }
 
-  override def onProcessingTime(time: Long, window: Window, ctx: Trigger.TriggerContext): TriggerResult = TriggerResult.CONTINUE
+  override def onProcessingTime(time: Long, window: GlobalWindow, ctx: Trigger.TriggerContext): TriggerResult = TriggerResult.CONTINUE
 
-  override def onEventTime(time: Long, window: Window, ctx: Trigger.TriggerContext): TriggerResult = TriggerResult.CONTINUE
+  override def onEventTime(time: Long, window: GlobalWindow, ctx: Trigger.TriggerContext): TriggerResult = TriggerResult.CONTINUE
 
-  override def clear(window: W, ctx: Trigger.TriggerContext): Unit =
+  override def clear(window: GlobalWindow, ctx: Trigger.TriggerContext): Unit =
     ctx.getPartitionedState(states).clear()
 }

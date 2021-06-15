@@ -37,7 +37,7 @@ object WindowStreamer {
 
 
     val dataStream =
-      createWindow().process(new LockWindowFunction(logger)).map {
+      createWindow(kafka).process(new LockWindowFunction(logger)).map {
         fileName =>
           Formatter.readFile(fileName, path)(logger)
       }.map(

@@ -10,13 +10,13 @@ import org.apache.flink.core.fs.Path
 import org.apache.flink.streaming.api.environment.LocalStreamEnvironment
 import org.apache.flink.streaming.api.functions.sink.filesystem.{OutputFileConfig, StreamingFileSink}
 import org.apache.flink.streaming.api.scala.{KeyedStream, StreamExecutionEnvironment, WindowedStream}
-import org.apache.flink.streaming.api.windowing.windows.Window
+import org.apache.flink.streaming.api.windowing.windows.GlobalWindow
 
 object KeyedStreamer {
 
   def createKey(element: (Char, Char)): Char = ???
 
-  def createWindow(dataStreamKafkaConsumer: KeyedStream[(Char, Char), Char]): WindowedStream[(Char, Char), Char, Window] = ???
+  def createWindow(dataStreamKafkaConsumer: KeyedStream[(Char, Char), Char]): WindowedStream[(Char, Char), Char, GlobalWindow] = ???
 
 
   def main(args: Array[String]) {
