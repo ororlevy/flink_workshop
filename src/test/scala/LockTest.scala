@@ -1,5 +1,4 @@
 import StageThree.MagicLock
-import Util.Formatter
 import org.scalatest.flatspec.AnyFlatSpec
 
 class LockTest extends AnyFlatSpec {
@@ -43,5 +42,4 @@ class LockTest extends AnyFlatSpec {
     val sum = MagicLock.solve(Seq(move, move, move))
     assert(sum.toInt == 559)
   }
-
 }
