@@ -9,18 +9,20 @@ class MazeTrigger(mazes: Map[Char, Room], states: ValueStateDescriptor[Pos], log
   override def onElement(element: (Char, Char), timestamp: Long, window: GlobalWindow, ctx: Trigger.TriggerContext): TriggerResult = {
     val state = ctx.getPartitionedState(states)
     val pos = state.value()
-    val validPos = if(pos==null) TreasureHunt.startingPos else pos
+    val validPos = if (pos == null) TreasureHunt.startingPos else pos
     val (key, step) = element
     mazes.get(key).fold(TriggerResult.CONTINUE) {
       room =>
         val (message, next) = room.progress(step, validPos)
-        logger.info(key + message)
+        logger.info(s"room: $key, $message")
         state.update(next)
-        val result = if (room.lastPoint == next) TriggerResult.FIRE else TriggerResult.CONTINUE
-        result
+        if (room.lastPoint == next) {
+          logger.info("You've found a chest")
+          TriggerResult.FIRE
+        } else {
+          TriggerResult.CONTINUE
+        }
     }
-
-
   }
 
   override def onProcessingTime(time: Long, window: GlobalWindow, ctx: Trigger.TriggerContext): TriggerResult = TriggerResult.CONTINUE

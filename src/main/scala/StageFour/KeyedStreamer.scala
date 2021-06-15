@@ -67,7 +67,7 @@ object KeyedStreamer {
       .build()
 
     dataStream.addSink(sink)
-    env.enableCheckpointing(1000)
+    env.enableCheckpointing(10000)
     env.execute()
 
   }

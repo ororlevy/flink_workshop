@@ -9,7 +9,7 @@ case class Room(maze: Array[Array[Int]], startPoint: Pos, val lastPoint: Pos, bl
   def getPossible(pos: Pos): List[(Int, Int, Char)] = {
     val row = pos.row
     val colmun = pos.column
-    List((row - 1, colmun, 's'), (row + 1, colmun, 'w'), (row, colmun - 1, 'a'), (row, colmun + 1, 'd')).filter {
+    List((row - 1, colmun, 'w'), (row + 1, colmun, 's'), (row, colmun - 1, 'a'), (row, colmun + 1, 'd')).filter {
       case (i, j, _) =>
         i >= 0 && i < size && j >= 0 && j < size && !blocked.contains((i, j))
     }
@@ -35,10 +35,10 @@ case class Room(maze: Array[Array[Int]], startPoint: Pos, val lastPoint: Pos, bl
         val next = currentPos.copy(row = currentPos.row + 1)
         define(next, currentPos)
       case 'a' | 'A' =>
-        val next = currentPos.copy(column = currentPos.column + 1)
+        val next = currentPos.copy(column = currentPos.column - 1)
         define(next, currentPos)
       case 'd' | 'D' =>
-        val next = currentPos.copy(column = currentPos.column - 1)
+        val next = currentPos.copy(column = currentPos.column + 1)
         define(next, currentPos)
     }
   }

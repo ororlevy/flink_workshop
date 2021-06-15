@@ -4,7 +4,6 @@ object KeyMaker {
 
   private val signs = Seq('j', 'J, 'c', 'C', 'V', 'v', 'm', 'M')
   private val directions = Seq('w', 'W', 'S', 's', 'd', 'D', 'a', 'A')
-  private val sign = Map()
 
   def commandMapper(message: String): (Char, Char)= {
     if(validate(message)) {
